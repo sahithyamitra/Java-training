@@ -1,0 +1,37 @@
+#creating table for stock
+
+create table stock(
+name varchar(20),
+shares int,
+company varchar(20),
+bought_date date,
+amount int);
+
+#creating table for sales
+
+create table sales(
+buyer_name varchar(20),
+seller_name varchar(20),
+cost int,
+discount int,
+transaction_date date);
+
+#displaying the current date and time
+
+Select CURRENT_DATE,CURRENT_TIMESTAMP from dual;
+
+#display current date
+
+select CURRENT_DATE,CURRENT_TIMESTAMP from dual;
+
+#display current date in DD/MM/YYYY format
+
+Select TO_CHAR(SYSDATE,'DD/MM/YYYY') from dual;
+
+#display current day as Tuesday
+
+SELECT TO_CHAR(date '1982-03-09', 'DAY') day FROM dual;
+
+#display date after 10 days from the current date
+
+SELECT (SYSDATE + 10) from dual;
