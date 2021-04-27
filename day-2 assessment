@@ -1,0 +1,56 @@
+#create table Employee with the following attributes and constraints
+
+create table employee(
+EmpFName varchar(20),
+EmpMName varchar(20),
+EmpLastName varchar(20),
+EmpAge int check (EmpAge>0 and EmpAge<50),
+EmpCity varchar(20) check (EmpCity like 'B%'),
+EmpDesignation varchar(20) check (EmpDesignation like '%Manager%' or EmpDesignation like '%manager%'),
+EmpId varchar(5) primary key,
+empDOB date);
+
+#insert 5 employee details
+
+insert into employee values('sahithya','raj','mitra',21,'Bangalore','Manager','emp01','11-08-1999');
+insert into employee values('shubh','jain','kR',14,'Bombay','Sales_Manager','emp02','12-23-2003');
+insert into employee values('Ritik','katkam','Mj',21,'Bangalore','manager','emp03','02-01-1999');
+insert into employee values('sangeetha','kaur','Gupta',45,'Bombay','Executive_Manager','emp04','05-25-1976');
+insert into employee values('sush','raj','Dr',25,'Banaswadi','Sales_Manager','emp05','09-08-1996');
+
+#update any employe and change city name
+
+update employee
+set EmpCity='Bijapur'
+where EmpFName='shubh';
+
+#delete an employee
+
+delete from employee
+where EmpId='emp04';
+
+#delete all employees
+
+truncate table employee;
+
+#get back all the employees deleted in previous delete
+
+rollback;
+
+#display employee  name and dob in(DD-MM-YYYY) format
+
+select EmpFName,EmpMName,EmpLastName,to_char(empDOB,'dd-mm-yyyy') as dob
+from employee;
+
+#display employee  name in following format  
+       Fname   Mname    lname
+Ex:  Sachin  Ramesh  Tendulkar
+should be displayed as  S.R.Tendulkar 
+
+select concat(concat(concat(substr(EmpFName,1,1),'.'),concat(substr(EmpMName,1,1),'.')),concat(EmpLastName,' '))
+from employee;
+
+
+
+
+
