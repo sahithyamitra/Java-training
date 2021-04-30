@@ -1,0 +1,69 @@
+#create a function to check 2 given chars are equal or not irrespective of the case
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG { 
+public static boolean isEqual(char c1 , char c2)
+{
+    int k=c1,k1=c2;
+    if(c1>='A' && c1<='Z')
+    {
+        if(c2>='A' && c2<='Z')
+        {
+            if(c1==c2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if((k+32)==k1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        if(c2>='a' && c2<='z')
+        {
+            if(c1==c2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if((k-32)==k1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+}
+public static void main(String args[]) 
+
+{ 
+       char c1='a';
+       char c2='A';
+       System.out.println(isEqual(c1 ,c2));
+}
+}
