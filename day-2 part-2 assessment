@@ -1,0 +1,26 @@
+#time-table
+
+create table timetable(
+day_ varchar(14),
+sess int,
+faculty varchar(20),
+sem varchar(10),
+room varchar(10),
+subject varchar(10),
+unique (sess,faculty,sem),
+unique (faculty,sem,room,subject),
+unique (day,sem,room,subject));
+
+#inserting into tables
+
+insert into timetable values('mon',1,'john','7th','r1','java');
+
+insert into timetable values('mon',1,'john','5th','r2','testing');
+
+insert into timetable values('mon',1,'cena','7th','r3','dbms');
+
+insert into timetable values('mon',1,'rock','4th','r1','ds');
+
+insert into timetable values('tue',1,'john','7th','r1','java'); 
+
+insert into timetable values('mon',2,'john','7th','r1','java'); 
