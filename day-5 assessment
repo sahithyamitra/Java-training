@@ -100,3 +100,30 @@ public static void main(String args[])
        System.out.println(isCapsOnly(k));
 }
 }
+
+#create a function to count no of caps  chars in the given string
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG { 
+public static int countCaps(String data)
+{
+    int count=0;
+    for(int i=0;i<data.length();i++)
+    {
+        char k=data.charAt(i);
+        if(k>='A' && k<='Z')
+        {
+            count++;
+        }
+    }
+    return count;
+}
+public static void main(String args[]) 
+{ 
+       String k="SAHITHYA";
+       System.out.println(countCaps(k));
+}
+}
