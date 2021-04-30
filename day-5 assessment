@@ -8,9 +8,10 @@ class GFG {
 public static String hasUpper(String data)
 {
     int count=0;
-    for(int i=0;i<data.length();i++)
+    char[] l=data.toCharArray();
+     for(int i=0;i<l.length;i++)
     {
-        if(data.charAt(i)>='A' && data.charAt(i)<='Z')
+        if(l[i]>='A' && l[i]<='Z')
         {
             count++;
         }
@@ -25,8 +26,9 @@ public static String hasUpper(String data)
     }
 }
 public static void main(String args[]) 
+
 { 
-       String k="Sahithya";
+       String k="SahITHya87";
        System.out.println(hasUpper(k));
 }
 }
@@ -42,10 +44,11 @@ class GFG {
 public static String hasUpper(String data)
 {
     int count=0;
-    for(int i=0;i<data.length();i++)
+    char[] l=data.toCharArray();
+    for(int i=0;i<l.length;i++)
     {
-        char k=data.charAt(i);
-        if(k=='0' || k=='1' || k=='2' || k=='3' || k=='4' || k=='5' || k=='6' || k=='7' || k=='8' || k=='9')
+        char k=l[i];
+    if(k=='0' || k=='1' || k=='2' || k=='3' || k=='4' || k=='5' || k=='6' || k=='7' || k=='8' || k=='9')
         {
             count++;
         }
@@ -61,7 +64,7 @@ public static String hasUpper(String data)
 }
 public static void main(String args[]) 
 { 
-       String k="SaHithYa923";
+       String k="SAHITHYA87";
        System.out.println(hasUpper(k));
 }
 }
