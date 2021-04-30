@@ -1,0 +1,32 @@
+#create a function to check the given string contains UPPER case char or not
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG { 
+public static String hasUpper(String data)
+{
+    int count=0;
+    for(int i=0;i<data.length();i++)
+    {
+        if(data.charAt(i)>='A' && data.charAt(i)<='Z')
+        {
+            count++;
+        }
+    }
+    if(count!=0)
+    {
+        return "yes";
+    }
+    else
+    {
+        return "No";
+    }
+}
+public static void main(String args[]) 
+{ 
+       String k="Sahithya";
+       System.out.println(hasUpper(k));
+}
+}
