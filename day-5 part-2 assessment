@@ -67,3 +67,108 @@ public static void main(String args[])
        System.out.println(isEqual(c1 ,c2));
 }
 }
+
+
+#create a function to   check 2 given Strings are equal or not irrespective of the case
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG { 
+public static boolean isEqual(String str1 , String str2)
+{
+    int count=0;
+    char[] s1=str1.toCharArray();
+    char[] s2=str2.toCharArray();
+    if(s1.length!=s2.length)
+    {
+        return false;
+    }
+    else
+    {
+        for(int i=0;i<s1.length;i++)
+        {
+            int k1=s1[i],k2=s2[i];
+            if(s1[i]>='A' && s1[i]<='Z')
+            {
+                if(s2[i]>='A' && s2[i]<='Z')
+                {
+                    if(s1[i]==s2[i])
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((k1+32)==k2)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+            else
+            {
+                if(s2[i]>='a' && s2[i]<='z')
+                {
+                    if(s1[i]==s2[i])
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if((k1-32)==k2)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+            }
+        }
+    }
+    if(count==s1.length)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+        
+}
+public static boolean using_stringclass(String s1,String s2)
+{
+    if(s1.equalsIgnoreCase(s2)==true)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+public static void main(String args[]) 
+
+{ 
+       String c1="HELLO";
+       String c2="hello";
+       System.out.println(isEqual(c1,c2));
+       System.out.println(using_stringclass(c1,c2));
+}
+}
