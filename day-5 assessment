@@ -65,3 +65,38 @@ public static void main(String args[])
        System.out.println(hasUpper(k));
 }
 }
+
+
+#create a function to check all chars in the given string are in  UPPER case or not
+
+import java.util.*;
+import java.io.*;
+import java.lang.*;
+
+class GFG { 
+public static boolean isCapsOnly(String data)
+{
+    int count=0;
+    for(int i=0;i<data.length();i++)
+    {
+        char k=data.charAt(i);
+        if(k>='A' && k<='Z')
+        {
+            count++;
+        }
+    }
+    if(count==data.length())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+public static void main(String args[]) 
+{ 
+       String k="SAHITHYA";
+       System.out.println(isCapsOnly(k));
+}
+}
