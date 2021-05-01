@@ -7,58 +7,16 @@ import java.lang.*;
 class GFG { 
 public static boolean isEqual(char c1 , char c2)
 {
-    int k=c1,k1=c2;
-    if(c1>='A' && c1<='Z')
+    if (c1==c2 ||( c1+32) ==32 || (c1-32) ==c2)
     {
-        if(c2>='A' && c2<='Z')
-        {
-            if(c1==c2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if((k+32)==k1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        return true;
     }
     else
     {
-        if(c2>='a' && c2<='z')
-        {
-            if(c1==c2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            if((k-32)==k1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        return false;
     }
 }
+
 public static void main(String args[]) 
 
 { 
@@ -79,82 +37,23 @@ class GFG {
 public static boolean isEqual(String str1 , String str2)
 {
     int count=0;
-    char[] s1=str1.toCharArray();
-    char[] s2=str2.toCharArray();
-    if(s1.length!=s2.length)
+    char[] k=str1.toCharArray();
+    char[] l=str2.toCharArray();
+    if(k.length!=l.length)
     {
         return false;
     }
     else
     {
-        for(int i=0;i<s1.length;i++)
+        for(int i=0;i<k.length;i++)
         {
-            int k1=s1[i],k2=s2[i];
-            if(s1[i]>='A' && s1[i]<='Z')
+            if(k[i]==l[i] ||(k[i] +32) ==l[i] || (k[i]-32) ==l[i])
             {
-                if(s2[i]>='A' && s2[i]<='Z')
-                {
-                    if(s1[i]==s2[i])
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if((k1+32)==k2)
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-            }
-            else
-            {
-                if(s2[i]>='a' && s2[i]<='z')
-                {
-                    if(s1[i]==s2[i])
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
-                else
-                {
-                    if((k1-32)==k2)
-                    {
-                        count++;
-                    }
-                    else
-                    {
-                        continue;
-                    }
-                }
+                count++;
             }
         }
     }
-    if(count==s1.length)
-    {
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-        
-}
-public static boolean using_stringclass(String s1,String s2)
-{
-    if(s1.equalsIgnoreCase(s2)==true)
+    if(count==k.length)
     {
         return true;
     }
@@ -169,6 +68,5 @@ public static void main(String args[])
        String c1="HELLO";
        String c2="hello";
        System.out.println(isEqual(c1,c2));
-       System.out.println(using_stringclass(c1,c2));
 }
 }
