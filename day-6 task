@@ -1,0 +1,97 @@
+#question-1
+
+package assignment;
+public class Task1 {
+	public static int sum(int ... x)
+	{
+		int c=0;
+		int max=Integer.MIN_VALUE,min=Integer.MAX_VALUE,odd=0,even=0,div_3=0;
+		for(int i=0;i<x.length;i++)
+		{
+			c+=x[i];
+			if(max<x[i])
+			{
+				max=x[i];
+			}
+			if(min>x[i])
+			{
+				min=x[i];
+			}
+			if(x[i]%2==0)
+			{
+				even++;
+			}
+			else
+			{
+				odd++;
+			}
+			if(x[i]%3==0)
+			{
+				div_3++;
+			}
+		}
+		System.out.println("maximum:"+max+"\n"+"minimum:"+min+"\n"+"odd positions:"+odd+"\n"+"Even positions:"+even+"\n"+"Disvisible by 3:"+div_3);
+		
+		return c;
+	}
+	public static void main(String[] args) {
+		
+		System.out.println("sum:"+sum(5,2,1,3,3,6));
+	}
+}
+
+
+#question-2
+
+package assignment;
+public class Task2 {
+	public static String reverse(String l)
+	{
+		char[] p=l.toCharArray();
+		String q="";
+		for(int i=p.length-1;i>=0;i--)
+		{
+			q+=p[i];
+		}
+		return q;
+	}
+	public static void main(String[] args) {
+		String k="Hello world";
+		System.out.println(reverse(k));
+	}
+}
+
+#question-3
+
+package assignment;
+public class Task3 {
+	public static String reverse_String(String p)
+	{
+		int j=0;
+		String res="";
+		char[] k=p.toCharArray();
+		for(int i=k.length-1;i>=0;i--)
+		{
+			if((k[j]>='A' && k[j]<='Z') && (k[i]>='a' && k[i]<='z'))
+			{
+				res+=(char)(k[i]-32);
+			}
+			else if((k[j]>='a' && k[j]<='z') && (k[i]>='A' && k[i]<='Z'))
+			{
+				res+=(char)(k[i]+32);
+			}
+			else
+			{
+				res+=(char)k[i];
+			}
+			j++;
+		}
+		return res;
+	}
+	public static void main(String[] args) {
+		String p="HeLloWorld";
+		System.out.println(reverse_String(p));
+	}
+}
+
+
