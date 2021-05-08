@@ -1,0 +1,150 @@
+create a table Player
+-> Name
+-> role
+-> style
+-> team
+
+----->>
+ insert player recs into the table from a jdbc program ensure util, model ,dao and service are implemented in your code
+ 
+ #database connection-dbutil
+ 
+package dbutil;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+	public class Player_con {
+
+		public static Connection dbconnect() {
+			try
+			{
+				Class.forName("oracle.jdbc.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","dxctest","pass");
+				return con;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+		}
+}
+
+#database creation using jdbc program
+
+package dbcre;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+public class Player_cre {
+
+	public void dbcreation(Connection con) {
+		try
+		{
+			String sql="create table Player(name varchar(20),role varchar(10),style varchar(20),team varchar(10))";
+			PreparedStatement stat=con.prepareStatement(sql);
+			
+			stat.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+}
+
+
+#inserting records into database-dao
+
+package dao;
+
+import service.*;
+import model.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+public class Player_rec {
+  public String dbinsert(Connection con,Player player) {
+		try
+		{
+			String sql="insert into Player values(?,?,?,?)";
+			PreparedStatement stat=con.prepareStatement(sql);
+			stat.setString(1,player.getName());
+			stat.setString(2,player.getRole());
+			stat.setString(3,player.getStyle());
+			stat.setString(4,player.getTeam());
+			if(stat.executeUpdate()>0)
+			{
+				return "records included";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "not included";
+	}
+}
+
+#database model
+
+package model;
+
+public class Player {
+private String name;
+private String role;
+private String style;
+private String team;
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public String getRole() {
+	return role;
+}
+public void setRole(String role) {
+	this.role = role;
+}
+public String getStyle() {
+	return style;
+}
+public void setStyle(String style) {
+	this.style = style;
+}
+public String getTeam() {
+	return team;
+}
+public void setTeam(String team) {
+	this.team = team;
+}
+}
+
+
+ #main method
+
+
+package service;
+import model.Player;
+import dbutil.Player_con;
+import dbcre.Player_cre;
+import java.sql.Connection;
+import dao.Player_rec;
+public class Player_main {
+  public static void main(String[] args) {
+		Player player=new Player();
+		player.setName("KL Rahul");
+		player.setRole("batsman");
+		player.setStyle("RHB");
+		player.setTeam("PK");
+		Player_cre pc=new Player_cre();
+		Player_con pcon=new Player_con();
+		Player_rec pr=new Player_rec();
+		Connection c=pcon.dbconnect();
+		if(c!=null)
+		{
+			pc.dbcreation(c);
+			System.out.println(pr.dbinsert(c,player));
+		}
+	}
+}
