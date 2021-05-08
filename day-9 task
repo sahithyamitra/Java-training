@@ -9,7 +9,7 @@ create a table Player
  
  #database connection-dbutil
  
-package dbutil;
+package com.myproj.dbutil;
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -32,7 +32,7 @@ import java.sql.DriverManager;
 
 #database creation using jdbc program
 
-package dbcre;
+package com.myproj.dbcre;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 public class Player_cre {
@@ -55,7 +55,7 @@ public class Player_cre {
 
 #inserting records into database-dao
 
-package dao;
+package com.myproj.dao;
 
 import service.*;
 import model.*;
@@ -87,7 +87,7 @@ public class Player_rec {
 
 #database model
 
-package model;
+package com.myproj.model;
 
 public class Player {
 private String name;
@@ -124,12 +124,12 @@ public void setTeam(String team) {
  #main method
 
 
-package service;
-import model.Player;
-import dbutil.Player_con;
-import dbcre.Player_cre;
+package com.myproj.service;
+import com.myproj.model.*;
+import com.myproj.dbutil.*;
+import com.myproj.dbcre.*;
 import java.sql.Connection;
-import dao.Player_rec;
+import com.myproj.dao.*;
 public class Player_main {
   public static void main(String[] args) {
 		Player player=new Player();
