@@ -1,7 +1,6 @@
-india, brazil , norway ,qatar , turkey
-
 #numberformat for countries
 
+india, brazil , norway ,qatar , turkey
 india - (example: +91-9999999999)
 // +91-9988776655 ->valid
 //+91-99A998877-> Invalid
