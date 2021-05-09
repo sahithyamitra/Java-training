@@ -37,22 +37,19 @@ public void setTeam(String team) {
 package dbcre;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-
 public class Player_cre {
-
 	public void dbcreation(Connection con) {
 		try
 		{
 			String sql="create table Player(name varchar(20),role varchar(10),style varchar(20),team varchar(10))";
 			PreparedStatement stat=con.prepareStatement(sql);
-			
 			stat.executeUpdate();
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 		}
-  }
+  	}
 }
 
 #Player database connection using jdbc:
@@ -63,9 +60,7 @@ package dbutil;
 	import java.sql.DriverManager;
 
 	public class Player_con {
-
 		public static Connection dbconnect() {
-			// TODO Auto-generated method stub
 			try
 			{
 				Class.forName("oracle.jdbc.OracleDriver");
@@ -95,9 +90,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Player_rec {
-
 	public String dbinsert(Connection con,Player player) {
-		// TODO Auto-generated method stub
 		try
 		{
 			String sql="insert into Player values(?,?,?,?)";
@@ -117,7 +110,6 @@ public class Player_rec {
 		}
 		return "not included";
 	}
-	
 	public Player retrievePlayer(String k)
 	{
 		Connection con= Player_con.dbconnect();
@@ -144,64 +136,50 @@ public class Player_rec {
 		return null;
 	}
 	
-	
 	public ArrayList<Player> getPlayers()
 	{
 
 	try {
 		Connection con=Player_con.dbconnect();
-	String sql="select * from Player";
-	PreparedStatement stat=con.prepareStatement(sql);
+		String sql="select * from Player";
+		PreparedStatement stat=con.prepareStatement(sql);
+		ResultSet rs= stat.executeQuery();
+		ArrayList<Player> players=new ArrayList<Player>();
+		while(rs.next())
+		{
+			String kname=rs.getString("name");
+			String krole=rs.getString("role");
+			String kstyle=rs.getString("style");
+			String kteam=rs.getString("team");
+			Player player=new Player();
+			player.setName(kname);
+			player.setRole(krole);
+			player.setStyle(kstyle);
+			player.setTeam(kteam);
+			players.add(player);
+		}
 
-
-	ResultSet rs= stat.executeQuery();
-
-	ArrayList<Player> players=new ArrayList<Player>();
-	while(rs.next())
-	{
-
-	String kname=rs.getString("name");
-	String krole=rs.getString("role");
-	String kstyle=rs.getString("style");
-	String kteam=rs.getString("team");
-
-	Player player=new Player();
-	player.setName(kname);
-	player.setRole(krole);
-	player.setStyle(kstyle);
-	player.setTeam(kteam);
-
-	players.add(player);
-	}
-
-	return players;
-
+		return players;
 	}
 	catch (Exception e) {
-
-	e.printStackTrace();
+		e.printStackTrace();
 	}
 	return null;
 	}
 	
 	public String deletePlayerByName(String dname)
 	{
-
 	try {
 
 	Connection con= Player_con.dbconnect();
-
 	String sql="delete from Player where Name=?";
 	PreparedStatement stat=con.prepareStatement(sql);
-
 	stat.setString(1, dname);
 	int rs= stat.executeUpdate();
-
 	if(rs>0)
 	return "recs for name "+dname +" deleted";
 	}
 	catch (Exception e) {
-
 	e.printStackTrace();
 	}
 	return null;
@@ -210,16 +188,11 @@ public class Player_rec {
 //update statement
 	public String updatePlayerClass(Player player)
 	{
-	
 	try {
-	
 	Player pOld=retrievePlayer(player.getName());
-	
 	Connection con= Player_con.dbconnect();
-	
 	String sql="Update Player set Role=?,Style=?,Team=? where Name=?";
 	PreparedStatement stat=con.prepareStatement(sql);
-	
 	if(player.getRole()==null)
 	{
 		player.setRole(pOld.getRole());
@@ -229,25 +202,19 @@ public class Player_rec {
 	{
 		player.setStyle(pOld.getStyle());
 	}
-	
 	if(player.getTeam()==null)
 	{
 		player.setTeam(pOld.getTeam());
 	}
-	
 	stat.setString(1,player.getName());
 	stat.setString(2,player.getRole());
 	stat.setString(3,player.getStyle());
 	stat.setString(4,player.getTeam());
-	
 	int rs= stat.executeUpdate();
 	if(rs>0) {
-	
-	System.out.println(pOld);
-	
-	System.out.println(player);
-	
-	return "recs updated for id "+player.getName();
+		System.out.println(pOld);
+		System.out.println(player);
+		return "recs updated for id "+player.getName();
 	}
 	}
 	catch (Exception e) {
