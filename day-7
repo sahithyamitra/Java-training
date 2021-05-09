@@ -1,0 +1,281 @@
+india, brazil , norway ,qatar , turkey
+
+#numberformat for countries
+
+india - (example: +91-9999999999)
+// +91-9988776655 ->valid
+//+91-99A998877-> Invalid
+//+91-999988 -> invalid
+
+brazil - (example: +55 15 99999-9999)
+// +55 15 78945-5645
+
+norway-(example +47-49-99-99-99)
+qatar -(example +974 3399-9999)
+turkey -(example+90 509-999999 or 0509-999-999)    
+
+
+#class numberformat
+
+interface numberformat_phone
+{
+boolean numberformat(String number);
+}
+abstract class CountryPhone implements numberformat_phone{}
+
+class India_num extends CountryPhone
+{
+public boolean numberformat_phone(String Number){
+	if(Number.length()==14) 
+  {
+		if(Number.startsWith("+91-")) {
+			char[] ch=Number.toCharArray();
+			int count=0;
+			if(ch[4]=='6'||ch[4]=='7'||ch[4]=='8'||ch[4]=='9')
+			{
+				for(int i=5;i<ch.length;i++)
+				{
+					if(ch[i]>=48 && ch[i]<=57)
+					{
+						count++;
+					}
+				}
+				if(count==9)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	else
+	{
+		return false;
+	}
+	
+}
+}
+
+
+class Brazil_num extends CountryPhone
+{
+	public boolean numberformat_phone(String Number) {
+		if(Number.length()==17)
+		{
+			if(Number.startsWith("+55 15 "))
+			{
+				char[] ch=Number.toCharArray();
+				int c=0,f=0,count=0;
+				for(int i=7;i<ch.length;i++)
+				{
+					if(ch[i]=='-')
+					{
+						count++;
+						f=1;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==0)
+					{
+						c++;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==1)
+					{
+						c--;
+					}
+				}
+				if(c==1 && cnt==1)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+		return false;
+		}
+	}
+	
+}
+
+class Norway_num extends CountryPhone
+{
+	public boolean numberformat_phone(String Number) {
+		if(Number.length()==15)
+		{
+			if(Number.startsWith("+47-49-"))
+			{
+				char[] ch=Number.toCharArray();
+				int c=0,f=0,count=0;
+				for(int i=7;i<ch.length;i++)
+				{
+					if(ch[i]=='-')
+					{
+						count++;
+						f+=1;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && (f==0 || f==2))
+					{
+						c++;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==1)
+					{
+						c--;
+					}
+				}
+				if(c==2 && cnt==2)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+		return false;
+		}
+	}
+}	
+
+
+class Qatar_num extends CountryPhone
+{
+	public boolean numberformat_phone(String Number) {
+		if(Number.length()==14)
+		{
+			if(Number.startsWith("+974 33"))
+			{
+				char[] ch=Number.toCharArray();
+				int c=0,f=0,count=0;
+				for(int i=7;i<ch.length;i++)
+				{
+					if(ch[i]=='-')
+					{
+						count++;
+						f=1;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==0)
+					{
+						c++;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==1)
+					{
+						c--;
+					}
+				}
+				if(c==-2 && cnt==1)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+		return false;
+		}
+	}
+}
+class Turkey_num extends CountryPhone
+{
+	public boolean numberformat_phone(String Number) {
+		if(Number.length()==14)
+		{
+			if(Number.startsWith("+90 509-"))
+			{
+				char[] ch=Number.toCharArray();
+				int c=0;
+				for(int i=8;i<ch.length;i++)
+				{
+					if(ch[i]>=48 && ch[i]<=57)
+					{
+						c++;
+					}
+				}
+				if(c==6)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else if(Number.length()==12)
+		{
+			if(Number.startsWith("0509"))
+			{
+				char[] ch=Number.toCharArray();
+				int c=0,f=0,cnt=0;
+				for(int i=4;i<ch.length;i++)
+				{
+					if(ch[i]=='-')
+					{
+						cnt++;
+						f+=1;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && (f==0 || f==2 ))
+					{
+						c++;
+					}
+					else if(ch[i]>=48 && ch[i]<=57 && f==1)
+					{
+						c--;
+					}
+				}
+				if(c==0 && cnt==2)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+		return false;
+		}
+	}
+}
+
+public class MainCountry {
+
+	public static void main(String[] args) {
+		India_num india=new India_num();
+		Brazil_num brazil=new Brazil_num();
+		Norway_num norway=new Norway_num();
+		Qatar_num qatar=new Qatar_num();
+		Turkey_num turkey=new Turkey_num();
+
+		System.out.println("India number:"+india.NumberFormat("+91-9939185672"));
+		System.out.println("Brazil number:"+brazil.NumberFormat("+55 15 93459-8456"));
+		System.out.println("Norway number:"+norway.NumberFormat("+47-49-89-34-43"));
+		System.out.println("Qatar number:"+qatar.NumberFormat("+974 3389-9456"));
+		System.out.println("Turkey number:"+turkey.NumberFormat("+90 509-956789"));
+		System.out.println("Turkey_1 number:"+turkey.NumberFormat("0509-678-986"));
+	}
+}
