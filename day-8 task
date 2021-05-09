@@ -1,0 +1,88 @@
+// create showroom class which has cars in it . no duplicate car can be stored
+
+// create 2 showroom  objects ..
+
+// accept showroom name from the cmd and display cars in the showroom
+
+#cars class
+
+import java.util.*;
+public class Cars {
+	private String name;
+	private String model_num;
+	private String color;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getModel_num() {
+		return model_num;
+	}
+	public void setModel_num(String model_num) {
+		this.model_num = model_num;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	@Override
+	public String toString() {
+		return "Showroom [name=" + name + ", model_num=" + model_num + ", color=" + color + "]";
+	}
+}
+
+#showroom class
+
+import java.util.*;
+public class Showroom {
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String name=sc.nextLine();
+		
+		Cars c1=new Cars();
+		c1.setName("Lamborgini Aventador");
+		c1.setModel_num("4S234MB456");
+		c1.setColor("Yellow");
+		
+		Cars c2=new Cars();
+		c2.setName("Ducati");
+		c2.setModel_num("2E445RE123");
+		c2.setColor("Blue");
+		
+		Cars c3=new Cars();
+		c3.setName("Mercedes");
+		c3.setModel_num("2E445RE723");
+		c3.setColor("Black");
+		
+		Cars c4=new Cars();
+		c4.setName("Bugati");
+		c4.setModel_num("2E445RE273");
+		c4.setColor("white");
+		
+		Set<Cars> st=new HashSet<>();
+		st.add(c1);
+		st.add(c2);
+		
+		Set<Cars> st2=new HashSet<>();
+		st2.add(c3);
+		st2.add(c4);
+		
+		Map<String ,Set<Cars>> map_sr = new HashMap<>();
+		map_sr.put("showroom1",st);
+		map_sr.put("showroom2",st2);
+		
+		for(Map.Entry hmap:map_sr.entrySet())
+		{
+			if((String.valueOf(hmap.getKey()).equalsIgnoreCase(name))==true)
+			{
+					System.out.println(hmap.getValue());
+			}
+		}
+	}
+}
+
