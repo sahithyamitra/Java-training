@@ -1,0 +1,637 @@
+#Player model
+
+package model;
+public class Player {
+private String name;
+private String role;
+private String style;
+private String team;
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public String getRole() {
+	return role;
+}
+public void setRole(String role) {
+	this.role = role;
+}
+public String getStyle() {
+	return style;
+}
+public void setStyle(String style) {
+	this.style = style;
+}
+public String getTeam() {
+	return team;
+}
+public void setTeam(String team) {
+	this.team = team;
+}
+}
+
+#Player table creation using jdbc:
+
+package dbcre;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public class Player_cre {
+
+	public void dbcreation(Connection con) {
+		try
+		{
+			String sql="create table Player(name varchar(20),role varchar(10),style varchar(20),team varchar(10))";
+			PreparedStatement stat=con.prepareStatement(sql);
+			
+			stat.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+  }
+}
+
+#Player database connection using jdbc:
+
+package dbutil;
+
+	import java.sql.Connection;
+	import java.sql.DriverManager;
+
+	public class Player_con {
+
+		public static Connection dbconnect() {
+			// TODO Auto-generated method stub
+			try
+			{
+				Class.forName("oracle.jdbc.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe","dxctest","pass");
+				return con;
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+}
+
+
+#Player-service(jdbc connection,inserting into database,retrieving by single record,retrieving all the records,deleting records from database,updating the database):
+
+package dao;
+
+import model.*;
+import dbutil.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Player_rec {
+
+	public String dbinsert(Connection con,Player player) {
+		// TODO Auto-generated method stub
+		try
+		{
+			String sql="insert into Player values(?,?,?,?)";
+			PreparedStatement stat=con.prepareStatement(sql);
+			stat.setString(1,player.getName());
+			stat.setString(2,player.getRole());
+			stat.setString(3,player.getStyle());
+			stat.setString(4,player.getTeam());
+			if(stat.executeUpdate()>0)
+			{
+				return "records included";
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "not included";
+	}
+	
+	public Player retrievePlayer(String k)
+	{
+		Connection con= Player_con.dbconnect();
+		String sql="select * from Player where NAME=?";
+		try {
+			PreparedStatement stat=con.prepareStatement(sql);
+			stat.setString(1,k);
+			ResultSet rs=stat.executeQuery();
+			rs.next();
+			String sname=rs.getString("NAME");
+			String srole=rs.getString("ROLE");
+			String sstyle=rs.getString("STYLE");
+			String steam=rs.getString("TEAM");
+			Player p=new Player();
+			p.setName(sname);
+			p.setRole(srole);
+			p.setStyle(sstyle);
+			p.setTeam(steam);
+			return p;
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	public ArrayList<Player> getPlayers()
+	{
+
+	try {
+		Connection con=Player_con.dbconnect();
+	String sql="select * from Player";
+	PreparedStatement stat=con.prepareStatement(sql);
+
+
+	ResultSet rs= stat.executeQuery();
+
+	ArrayList<Player> players=new ArrayList<Player>();
+	while(rs.next())
+	{
+
+	String kname=rs.getString("name");
+	String krole=rs.getString("role");
+	String kstyle=rs.getString("style");
+	String kteam=rs.getString("team");
+
+	Player player=new Player();
+	player.setName(kname);
+	player.setRole(krole);
+	player.setStyle(kstyle);
+	player.setTeam(kteam);
+
+	players.add(player);
+	}
+
+	return players;
+
+	}
+	catch (Exception e) {
+
+	e.printStackTrace();
+	}
+	return null;
+	}
+	
+	public String deletePlayerByName(String dname)
+	{
+
+	try {
+
+	Connection con= Player_con.dbconnect();
+
+	String sql="delete from Player where Name=?";
+	PreparedStatement stat=con.prepareStatement(sql);
+
+	stat.setString(1, dname);
+	int rs= stat.executeUpdate();
+
+	if(rs>0)
+	return "recs for name "+dname +" deleted";
+	}
+	catch (Exception e) {
+
+	e.printStackTrace();
+	}
+	return null;
+	}
+	
+//update statement
+	public String updatePlayerClass(Player player)
+	{
+	
+	try {
+	
+	Player pOld=retrievePlayer(player.getName());
+	
+	Connection con= Player_con.dbconnect();
+	
+	String sql="Update Player set Role=?,Style=?,Team=? where Name=?";
+	PreparedStatement stat=con.prepareStatement(sql);
+	
+	if(player.getRole()==null)
+	{
+		player.setRole(pOld.getRole());
+	}
+	
+	if(player.getStyle()==null)
+	{
+		player.setStyle(pOld.getStyle());
+	}
+	
+	if(player.getTeam()==null)
+	{
+		player.setTeam(pOld.getTeam());
+	}
+	
+	stat.setString(1,player.getName());
+	stat.setString(2,player.getRole());
+	stat.setString(3,player.getStyle());
+	stat.setString(4,player.getTeam());
+	
+	int rs= stat.executeUpdate();
+	if(rs>0) {
+	
+	System.out.println(pOld);
+	
+	System.out.println(player);
+	
+	return "recs updated for id "+player.getName();
+	}
+	}
+	catch (Exception e) {
+	
+	e.printStackTrace();
+	}
+	return null;
+	}
+}
+
+#save player details-jsp file
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Bootstrap Theme Company</title>
+  <meta charset="ISO-8859-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+	.jumbotron {
+  background-color: #A9A9A9;
+  color: #ffffff;
+}
+</style>
+</head>
+<body>
+<div class="jumbotron text-center">
+  <h1>Players Information</h1>
+  <p>Create,Insert,Delete and Update player information</p>
+</div>
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li><a href="SavePlayer.jsp">Create</a></li>
+    <li><a href="DeletePlayer.jsp">Delete</a></li>
+    <li><a href="SearchPlayer.jsp">Search/Update</a></li>        
+</ul>
+
+<form action="PlayerService">
+<div class="position-absolute top-50 start-50 translate-middle">
+<div class="form-group">
+Player's Name: <input type="text" name="name"><br><br>
+</div>
+<div class="form-group">
+Player's Role: <input type="text" name="role"><br><br>
+</div>
+<div class="form-group">
+Player's Style: <input type="text" name="style"><br><br>
+</div>
+<div class="form-group">
+Player's Team: <input type="text" name="team"><br><br>
+</div>
+<input type="submit" value="Save"><br>
+</div>
+</form>
+</body>
+</html>
+
+#Player-service-servlet for saving details of players:
+
+package dbservice;
+import java.io.IOException;
+import java.io.PrintWriter;
+import dao.*;
+import dbutil.*;
+import model.*;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.sql.Connection;
+@WebServlet("/PlayerService")
+public class PlayerService extends HttpServlet {
+       
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		String cname=request.getParameter("name");
+		String crole=request.getParameter("role");
+		String cstyle=request.getParameter("style");
+		String cteam=request.getParameter("team");
+		Player_con player_connection=new Player_con();
+		Player_rec player_records=new Player_rec();
+		Player player=new Player();
+		player.setName(cname);
+		player.setRole(crole);
+		player.setStyle(cstyle);
+		player.setTeam(cteam);
+		Connection c=player_connection.dbconnect();
+		if(c!=null)
+		{
+			out.print(player_records.dbinsert(c, player));
+		}
+	}
+}
+
+#player display jsp-for displaying the updated records:
+
+<%@page import="model.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Theme Company</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+.jumbotron {
+  background-color: #A9A9A9;
+  color: #ffffff;
+}
+</style>
+</head>
+
+<style type="text/css">
+
+table {
+			border:solid 5px red;
+            border-top-color:#B22222;
+            border-right-color:#FEB9B9;
+            border-bottom-color:#FEB9B9;
+            border-left-color:#B22222;
+      }
+td{
+text-align: center;
+width: 100px;
+}
+
+</style>
+
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li><a href="SavePlayer.jsp">Create</a></li>
+    <li><a href="DeletePlayer.jsp">Delete</a></li>
+    <li><a href="SearchPlayer.jsp">Search/Update</a></li>        
+</ul>
+
+<form action="PlayerupdateServlet">
+<h1>Player Details</h1>
+
+<table width='80%' border='2px'>
+<%! Player player; %>
+<%player=(Player)session.getAttribute("player"); %>
+<tr><td>Player name:</td> <td> <% out.print(player.getName()); %> </td> </tr>
+<tr><td>Player Role:</td> <td> <% out.print("<input type='text' name='player_role' value='"+ player.getRole()+"'>"); %> </td> </tr>
+<tr><td>Player Style:</td> <td> <% out.print("<input type='text' name='player_style' value='"+ player.getStyle()+"'>"); %> </td> </tr>
+<tr><td>Player Team:</td> <td> <% out.print("<input type='text' name='player_team' value='"+ player.getTeam()+"'>"); %> </td> </tr>
+
+</table>
+<br>
+<br>
+<input type="submit" >
+</form>
+</body>
+<div class="jumbotron text-center">
+  <h1>Players Information</h1>
+  <p>Create,Insert,Delete and Update player information</p>
+</div>
+</html>
+
+#player update-java servlet for updating records
+
+package dbservice;
+import model.Player;
+import dao.Player_rec;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/PlayerupdateServlet")
+public class PlayerupdateServelt extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Player player=(Player)request.getSession().getAttribute("player");
+
+		  String player_name= player.getName();
+		 String player_role= request.getParameter("role");
+		String player_style= request.getParameter("style");
+		String player_team=request.getParameter("team");
+
+		Player updateplayer =new Player();
+		updateplayer.setName(player_name);
+		updateplayer.setRole(player_role);
+		updateplayer.setStyle(player_style);
+		updateplayer.setTeam(player_team);
+		
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		
+		Player_rec player_rec=new Player_rec();
+		out.print(player_rec.updatePlayerClass(updateplayer));
+	}
+ }
+ 
+ #Player search jsp:
+ 
+<%@ page import="dao.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="model.*"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Player Information</title>
+  <meta charset="ISO-8859-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+.jumbotron {
+  background-color: #A9A9A9;
+  color: #ffffff;
+}
+</style>
+</head>
+<body>
+<div class="jumbotron text-center">
+  <h1>Players Information</h1>
+  <p>Create,Insert,Delete and Update player information</p>
+</div>
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li><a href="SavePlayer.jsp">Create</a></li>
+    <li><a href="DeletePlayer.jsp">Delete</a></li>
+    <li><a href="SearchPlayer.jsp">Search/Update</a></li>        
+  </ul>
+
+<form action="PlayersearchServlet">
+<div class="form-group">
+    <label for="Name">Player Name:</label>
+    <input type="Name" class="form-control" id="Name">
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+<table class="table table-striped">
+	<thead>
+      <tr>
+        <th>Player Name</th>
+        <th>Player Role</th>
+        <th>Player Style</th>
+        <th>Player Team</th>
+      </tr>
+    </thead>
+<%
+Player_rec player_records=new Player_rec();
+ArrayList<Player> ar=player_records.getPlayers();
+for(Player pl:ar)
+{
+	out.print("<tr>");
+	out.print("<td> "+pl.getName()+"</td>");
+	out.print("<td> "+pl.getRole()+"</td>");
+	out.print("<td> "+pl.getStyle()+"</td>");
+	out.print("<td> "+pl.getTeam()+"</td>");
+	out.print("</tr>");
+}
+%>
+</table>
+</body>
+</html>
+ 
+ #Player search servlet-for searching the records:
+ 
+package dbservice;
+import dao.*;
+import dbutil.*;
+import model.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import javax.servlet.RequestDispatcher;
+
+import java.sql.Connection;
+
+@WebServlet("/PlayersearchServlet")
+public class PlayersearchServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		String kname=request.getParameter("name");
+		Player_rec player_record=new Player_rec();
+		Player_con player_connection=new Player_con();
+		Connection con=player_connection.dbconnect();
+		Player player=player_record.retrievePlayer(kname);
+		
+		HttpSession session=request.getSession();
+		session.setAttribute("player",player);
+		
+		RequestDispatcher rd=request.getRequestDispatcher("DisplayPlayer.jsp");
+		rd.forward(request, response);
+	}
+}
+
+#Delete player records jsp:
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bootstrap Theme Company</title>
+  <meta charset="ISO-8859-1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+	.jumbotron {
+  	background-color: #A9A9A9;
+  	color: #ffffff;
+	}
+</style>
+</head>
+<body>
+<div class="jumbotron text-center">
+  <h1>Players Information</h1>
+  <p>Create,Insert,Delete and Update player information</p>
+</div>
+<ul class="nav nav-tabs nav-justified" role="tablist">
+    <li><a href="SavePlayer.jsp">Create</a></li>
+    <li><a href="DeletePlayer.jsp">Delete</a></li>
+    <li><a href="SearchPlayer.jsp">Search/Update</a></li>        
+  </ul>
+
+<form action="PlayerDeleteServlet">
+Player's Name: <input type="text" name="name"><br><br>
+<input type="submit" value="Delete"><br><br>
+</form>
+</body>
+</html>
+
+#delete player records-servlet:
+
+package dbservice;
+import dao.*;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+@WebServlet("/PlayerDeleteServlet")
+public class PlayerDeleteServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out=response.getWriter();
+		response.setContentType("text/html");
+		String dname=request.getParameter("name");
+		Player_rec pr=new Player_rec();
+		String msg=pr.deletePlayerByName(dname);
+		if(msg!=null)
+		{
+			out.print(msg);
+		}
+		
+	}
+}
+
+
+
