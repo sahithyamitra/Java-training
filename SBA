@@ -1,6 +1,7 @@
 #Player model
 
 package model;
+
 public class Player {
 private String name;
 private String role;
@@ -14,6 +15,10 @@ public void setName(String name) {
 }
 public String getRole() {
 	return role;
+}
+@Override
+public String toString() {
+	return "Player [name=" + name + ", role=" + role + ", style=" + style + ", team=" + team + "]";
 }
 public void setRole(String role) {
 	this.role = role;
@@ -60,7 +65,9 @@ package dbutil;
 	import java.sql.DriverManager;
 
 	public class Player_con {
+
 		public static Connection dbconnect() {
+			// TODO Auto-generated method stub
 			try
 			{
 				Class.forName("oracle.jdbc.OracleDriver");
@@ -90,7 +97,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Player_rec {
+
 	public String dbinsert(Connection con,Player player) {
+		// TODO Auto-generated method stub
 		try
 		{
 			String sql="insert into Player values(?,?,?,?)";
@@ -110,6 +119,7 @@ public class Player_rec {
 		}
 		return "not included";
 	}
+	
 	public Player retrievePlayer(String k)
 	{
 		Connection con= Player_con.dbconnect();
@@ -136,50 +146,64 @@ public class Player_rec {
 		return null;
 	}
 	
+	
 	public ArrayList<Player> getPlayers()
 	{
 
 	try {
 		Connection con=Player_con.dbconnect();
-		String sql="select * from Player";
-		PreparedStatement stat=con.prepareStatement(sql);
-		ResultSet rs= stat.executeQuery();
-		ArrayList<Player> players=new ArrayList<Player>();
-		while(rs.next())
-		{
-			String kname=rs.getString("name");
-			String krole=rs.getString("role");
-			String kstyle=rs.getString("style");
-			String kteam=rs.getString("team");
-			Player player=new Player();
-			player.setName(kname);
-			player.setRole(krole);
-			player.setStyle(kstyle);
-			player.setTeam(kteam);
-			players.add(player);
-		}
+	String sql="select * from Player";
+	PreparedStatement stat=con.prepareStatement(sql);
 
-		return players;
+
+	ResultSet rs= stat.executeQuery();
+
+	ArrayList<Player> players=new ArrayList<Player>();
+	while(rs.next())
+	{
+
+	String kname=rs.getString("name");
+	String krole=rs.getString("role");
+	String kstyle=rs.getString("style");
+	String kteam=rs.getString("team");
+
+	Player player=new Player();
+	player.setName(kname);
+	player.setRole(krole);
+	player.setStyle(kstyle);
+	player.setTeam(kteam);
+
+	players.add(player);
+	}
+
+	return players;
+
 	}
 	catch (Exception e) {
-		e.printStackTrace();
+
+	e.printStackTrace();
 	}
 	return null;
 	}
 	
 	public String deletePlayerByName(String dname)
 	{
+
 	try {
 
 	Connection con= Player_con.dbconnect();
+
 	String sql="delete from Player where Name=?";
 	PreparedStatement stat=con.prepareStatement(sql);
+
 	stat.setString(1, dname);
 	int rs= stat.executeUpdate();
+
 	if(rs>0)
 	return "recs for name "+dname +" deleted";
 	}
 	catch (Exception e) {
+
 	e.printStackTrace();
 	}
 	return null;
@@ -188,11 +212,17 @@ public class Player_rec {
 //update statement
 	public String updatePlayerClass(Player player)
 	{
+	
 	try {
+	
+		System.out.println(player.getName());
 	Player pOld=retrievePlayer(player.getName());
+	
 	Connection con= Player_con.dbconnect();
+	
 	String sql="Update Player set Role=?,Style=?,Team=? where Name=?";
 	PreparedStatement stat=con.prepareStatement(sql);
+	
 	if(player.getRole()==null)
 	{
 		player.setRole(pOld.getRole());
@@ -202,19 +232,23 @@ public class Player_rec {
 	{
 		player.setStyle(pOld.getStyle());
 	}
+	
 	if(player.getTeam()==null)
 	{
 		player.setTeam(pOld.getTeam());
 	}
-	stat.setString(1,player.getName());
-	stat.setString(2,player.getRole());
-	stat.setString(3,player.getStyle());
-	stat.setString(4,player.getTeam());
+	
+	stat.setString(4,player.getName());
+	stat.setString(1,player.getRole());
+	stat.setString(2,player.getStyle());
+	stat.setString(3,player.getTeam());
+	System.out.println(pOld);
+	
+	System.out.println(player);
+	
 	int rs= stat.executeUpdate();
 	if(rs>0) {
-		System.out.println(pOld);
-		System.out.println(player);
-		return "recs updated for id "+player.getName();
+	return "recs updated for id "+player.getName();
 	}
 	}
 	catch (Exception e) {
@@ -224,6 +258,8 @@ public class Player_rec {
 	return null;
 	}
 }
+
+
 
 #save player details-jsp file
 
@@ -347,6 +383,7 @@ table {
             border-bottom-color:#FEB9B9;
             border-left-color:#B22222;
       }
+
 td{
 text-align: center;
 width: 100px;
@@ -358,7 +395,10 @@ width: 100px;
 <title>Insert title here</title>
 </head>
 <body>
-
+<div class="jumbotron text-center">
+  <h1>Players Information</h1>
+  <p>Create,Insert,Delete and Update player information</p>
+</div>
 <ul class="nav nav-tabs nav-justified" role="tablist">
     <li><a href="SavePlayer.jsp">Create</a></li>
     <li><a href="DeletePlayer.jsp">Delete</a></li>
@@ -382,10 +422,6 @@ width: 100px;
 <input type="submit" >
 </form>
 </body>
-<div class="jumbotron text-center">
-  <h1>Players Information</h1>
-  <p>Create,Insert,Delete and Update player information</p>
-</div>
 </html>
 
 #player update-java servlet for updating records
@@ -407,10 +443,11 @@ public class PlayerupdateServelt extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Player player=(Player)request.getSession().getAttribute("player");
 
+
 		  String player_name= player.getName();
-		 String player_role= request.getParameter("role");
-		String player_style= request.getParameter("style");
-		String player_team=request.getParameter("team");
+		 String player_role= request.getParameter("player_role");
+		String player_style= request.getParameter("player_style");
+		String player_team=request.getParameter("player_team");
 
 		Player updateplayer =new Player();
 		updateplayer.setName(player_name);
@@ -424,7 +461,8 @@ public class PlayerupdateServelt extends HttpServlet {
 		Player_rec player_rec=new Player_rec();
 		out.print(player_rec.updatePlayerClass(updateplayer));
 	}
- }
+
+}
  
  #Player search jsp:
  
